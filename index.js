@@ -19,6 +19,11 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/about", aboutRoutes);
 app.use("/api/projects", projectRoutes);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Backend is running" });
+});
+
+
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is listening on port ${process.env.PORT || 5000}`)
