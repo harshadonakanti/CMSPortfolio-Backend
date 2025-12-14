@@ -1,4 +1,4 @@
-import UserInfo from "../models/UserInfo.js";
+import UserInfo from "../models/userInfo.js";
 
 export const saveUserInfo = async (req, res) => {
   try {
