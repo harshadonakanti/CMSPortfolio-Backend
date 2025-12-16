@@ -1,30 +1,34 @@
-import express from "express"
-import cors from 'cors'
-import authRouter from "./routes/auth.js"
-import connectToDb from './dataBase/db.js'
-import dotenv from "dotenv"
-import userInfoRoutes from './routes/userInfoRoutes.js'
+import dotenv from "dotenv";
+dotenv.config();              // ✅ MUST be first
+console.log("MONGO_URI USED BY BACKEND:", process.env.MONGO_URI);
+
+import express from "express";
+import cors from "cors";
+import connectToDb from "./dataBase/db.js";
+
+import authRouter from "./routes/auth.js";
+import userInfoRoutes from "./routes/userInfoRoutes.js";
 import aboutRoutes from "./routes/about.js";
 import projectRoutes from "./routes/projectRoutes.js";
-dotenv.config()
-connectToDb()
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use("/api/auth", authRouter)
-app.use('/api/userinfo', userInfoRoutes)
-app.use("/uploads", express.static("uploads"));
+app.use(cors());
+app.use(express.json());
+
+connectToDb();                // ✅ AFTER dotenv
+
+
+app.use("/api/auth", authRouter);
+app.use("/api/userinfo", userInfoRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/uploads", express.static("uploads"));
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "OK", message: "Backend is running" });
+  res.json({ status: "OK" });
 });
 
-
-
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is listening on port ${process.env.PORT || 5000}`)
-})
+  console.log(`Server running on port ${process.env.PORT || 5000}`);
+});
